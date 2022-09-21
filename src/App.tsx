@@ -1,24 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useEffect, useState} from 'react';
 import './App.css';
+import { post } from './components/models/post';
+import { useAppDispatch, useAppSelector } from './hooks/redux';
+import {fetch} from './toolkit/PostsFeatching'
 
 function App() {
+
+  const dispatch = useAppDispatch()
+  const {posts, loading, error} = useAppSelector(state => state.toolkitSlice)
+
+  useEffect(() => {
+    dispatch(fetch())
+  }, [])
+
+  console.log(posts)
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {loading && <h1>Идет загрузка</h1>}
+      {error && <h1>{error}</h1>}
+      {JSON.stringify(posts, null, 2)}
     </div>
   );
 }
